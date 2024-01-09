@@ -1,0 +1,42 @@
+networks:
+  wplan:
+    ipam:
+      config:
+      - subnet: 192.168.56.0/29
+
+volumes:
+  dbdata:
+  wpdata:
+ 
+services:
+  db:
+    image: mariadb:10.4
+    networks: 
+    - wplan
+    env_file:
+    - db.env
+    volumes:
+    - type: volume
+      source: dbdata
+      target: /var/lib/mysql
+    - type: tmpfs
+      target: /tmp
+#      size: 1024000
+          
+  wp:
+    image: wordpress:latest
+    networks: 
+    - wplan
+    env_file:
+    - wp.env
+    environment:
+    - WORDPRESS_DB_HOST=db
+    volumes:
+    - type: volume
+      source: wpdata
+      target: /var/www/html
+    ports:
+    - protocol: tcp
+      published: 80
+      target: 80
+

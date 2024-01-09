@@ -1,0 +1,4 @@
+services:
+  db:
+    environment:
+    - MYSQL_ROOT_PASSWORD=truc_de_prod

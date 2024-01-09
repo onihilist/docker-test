@@ -1,0 +1,37 @@
+networks:
+  lan:
+
+volumes:
+  dbdata:
+  ncdata:
+
+services:
+
+  dbserver:
+    image: postgres:16
+    networks:
+    - lan
+    env_file:
+    - db.env
+    volumes:
+    - type: volume
+      source: dbdata
+      target: /var/lib/postgresql/data
+  nc:
+    image: nextcloud:28
+    networks:
+    - lan
+    env_file:
+    - db.env
+    - nc.env
+    # Celle là, on la met en dur pour la mettre en évidence
+    environment:
+      POSTGRES_HOST: dbserver
+    ports:
+    - protocol: tcp
+      published: 8080
+      target: 80
+    volumes:
+    - type: volume
+      source: ncdata
+      target: /var/www/html

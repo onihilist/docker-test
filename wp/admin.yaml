@@ -1,0 +1,18 @@
+ 
+services:
+
+  pma:
+    image: phpmyadmin:latest
+    env_file:
+    - pma.env
+    networks: 
+    - wplan
+    volumes:
+    - type: bind
+      source: /srv/pma/sessions
+      target: /var/lib/php/sessions
+    ports:
+    - published: 8080
+      target: 80
+        
+    
